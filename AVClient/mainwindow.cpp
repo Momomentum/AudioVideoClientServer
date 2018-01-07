@@ -13,10 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pushButton_7->setIconSize(QSize(192,108));
     //vidWidget = new QVideoWidget;
     player = new QMediaPlayer;
+    resultPlayer = new QMediaPlayer;
+    player->setVideoOutput(ui->widget);
+    resultPlayer->setVideoOutput(ui->widget_2);
 
 
 
-    player->setMedia(QUrl("C:/Users/Lukas/Documents/AVClient/Assets/Big_Buck_Bunny_4K.webm.480p.webm"));
+    player->setMedia(QUrl("rtsp://192.168.0.15:8554/test"));
+    resultPlayer->setMedia(QUrl("rtsp://192.168.0.15:8554/test"));
 
     //player->play();
 
@@ -52,21 +56,22 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_pushButton_8_clicked()
 {
-    player->setVideoOutput(ui->widget);
+
     ui->stackedWidget->setCurrentIndex(3);
     player->play();
+    player->setVolume(50);
 }
 
 void MainWindow::on_pushButton_5_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
-    player->stop();
+    player->setVolume(0);
 }
 
 void MainWindow::on_pushButton_6_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
-    player->stop();
+    player->setVolume(0);
 }
 
 void MainWindow::on_pushButton_9_clicked()
@@ -77,12 +82,14 @@ void MainWindow::on_pushButton_9_clicked()
 void MainWindow::on_pushButton_10_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
+    resultPlayer->setVolume(0);
+    resultPlayer->play();
 }
 
 void MainWindow::on_pushButton_4_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
-    player->stop();
+    player->setVolume(0);
 }
 
 void MainWindow::on_dial_valueChanged(int value)
@@ -163,4 +170,11 @@ void MainWindow::on_dial_9_valueChanged(int value)
 void MainWindow::on_verticalSlider_2_valueChanged(int value)
 {
     music_right_master = value;
+}
+
+void MainWindow::on_pushButton_12_clicked()
+{
+    serveradress = ui->lineEdit->text();
+    //qDebug() << serveradress;
+    player->setMedia(QUrl("rtsp://"+serveradress+":8554/test"));
 }

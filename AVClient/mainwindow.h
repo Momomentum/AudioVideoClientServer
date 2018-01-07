@@ -34,10 +34,12 @@ public:
     int music_right_effect_1;
     int music_right_effect_2;
     int music_right_effect_3;
+    QString serveradress;
     QStringList fileNames;
     QMediaPlayer* player;
     QMediaPlayer* leftPlayer;
     QMediaPlayer* rightPlayer;
+    QMediaPlayer* resultPlayer;
 
 private slots:
     void on_pushButton_2_clicked();
@@ -93,6 +95,8 @@ private slots:
     void on_dial_9_valueChanged(int value);
 
     void on_verticalSlider_2_valueChanged(int value);
+
+    void on_pushButton_12_clicked();
 
 private:
     Ui::MainWindow *ui;
