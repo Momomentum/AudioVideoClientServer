@@ -84,3 +84,83 @@ void MainWindow::on_pushButton_4_clicked()
     ui->stackedWidget->setCurrentIndex(0);
     player->stop();
 }
+
+void MainWindow::on_dial_valueChanged(int value)
+{
+    music_left_high = value;
+}
+
+void MainWindow::on_dial_2_valueChanged(int value)
+{
+    music_left_mid = value;
+}
+
+void MainWindow::on_dial_3_valueChanged(int value)
+{
+    music_left_low = value;
+}
+
+void MainWindow::on_dial_4_valueChanged(int value)
+{
+    music_left_effect_1 = value;
+}
+
+void MainWindow::on_dial_5_valueChanged(int value)
+{
+    music_left_effect_2 = value;
+}
+
+void MainWindow::on_dial_6_valueChanged(int value)
+{
+    music_left_effect_3 = value;
+}
+
+void MainWindow::on_dial_13_valueChanged(int value)
+{
+    music_master = value;
+}
+
+void MainWindow::on_verticalSlider_valueChanged(int value)
+{
+    music_left_master = value;
+}
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    music_cross = value;
+}
+
+void MainWindow::on_dial_7_valueChanged(int value)
+{
+    music_right_high = value;
+}
+
+void MainWindow::on_dial_10_valueChanged(int value)
+{
+    music_right_mid = value;
+}
+
+void MainWindow::on_dial_11_valueChanged(int value)
+{
+    music_right_low = value;
+}
+
+void MainWindow::on_dial_8_valueChanged(int value)
+{
+    music_right_effect_1 = value;
+}
+
+void MainWindow::on_dial_12_valueChanged(int value)
+{
+    music_right_effect_2 = value;
+}
+
+void MainWindow::on_dial_9_valueChanged(int value)
+{
+    music_right_effect_3 = value;
+}
+
+void MainWindow::on_verticalSlider_2_valueChanged(int value)
+{
+    music_right_master = value;
+}

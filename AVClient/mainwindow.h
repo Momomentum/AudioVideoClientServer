@@ -35,7 +35,6 @@ public:
     int music_right_effect_2;
     int music_right_effect_3;
     QStringList fileNames;
-    QVideoWidget* vidWidget;
     QMediaPlayer* player;
     QMediaPlayer* leftPlayer;
     QMediaPlayer* rightPlayer;
@@ -60,6 +59,40 @@ private slots:
     void on_pushButton_10_clicked();
 
     void on_pushButton_4_clicked();
+
+    void on_dial_valueChanged(int value);
+
+    void on_dial_2_valueChanged(int value);
+
+    void on_dial_3_valueChanged(int value);
+
+    void on_dial_music_left_low_valueChanged(int value);
+
+    void on_dial_4_valueChanged(int value);
+
+    void on_dial_5_valueChanged(int value);
+
+    void on_dial_6_valueChanged(int value);
+
+    void on_dial_13_valueChanged(int value);
+
+    void on_verticalSlider_valueChanged(int value);
+
+    void on_horizontalSlider_valueChanged(int value);
+
+    void on_dial_7_valueChanged(int value);
+
+    void on_dial_10_valueChanged(int value);
+
+    void on_dial_11_valueChanged(int value);
+
+    void on_dial_8_valueChanged(int value);
+
+    void on_dial_12_valueChanged(int value);
+
+    void on_dial_9_valueChanged(int value);
+
+    void on_verticalSlider_2_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
