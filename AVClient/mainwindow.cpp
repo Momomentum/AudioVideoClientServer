@@ -14,13 +14,18 @@ MainWindow::MainWindow(QWidget *parent) :
     //vidWidget = new QVideoWidget;
     player = new QMediaPlayer;
     resultPlayer = new QMediaPlayer;
+    leftPlayer = new QMediaPlayer;
+    rightPlayer = new QMediaPlayer;
     player->setVideoOutput(ui->widget);
     resultPlayer->setVideoOutput(ui->widget_2);
+    leftPlayer->setVideoOutput(ui->widget_3);
+    rightPlayer->setVideoOutput(ui->widget_4);
 
 
 
     player->setMedia(QUrl("rtsp://192.168.0.15:8554/test"));
     resultPlayer->setMedia(QUrl("rtsp://192.168.0.15:8554/test"));
+    leftPlayer->setMedia(QUrl("rtsp://192.168.0.15:8554/audio1"));
 
     //player->play();
 
@@ -71,7 +76,9 @@ void MainWindow::on_pushButton_5_clicked()
 void MainWindow::on_pushButton_6_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
-    player->setVolume(0);
+    resultPlayer->setVolume(0);
+    leftPlayer->setVolume(0);
+    rightPlayer->setVolume(0);
 }
 
 void MainWindow::on_pushButton_9_clicked()
@@ -82,6 +89,8 @@ void MainWindow::on_pushButton_9_clicked()
 void MainWindow::on_pushButton_10_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
+    leftPlayer->setVolume(50);
+    leftPlayer->play();
     resultPlayer->setVolume(0);
     resultPlayer->play();
 }
@@ -177,4 +186,6 @@ void MainWindow::on_pushButton_12_clicked()
     serveradress = ui->lineEdit->text();
     //qDebug() << serveradress;
     player->setMedia(QUrl("rtsp://"+serveradress+":8554/test"));
+    resultPlayer->setMedia(QUrl("rtsp://"+serveradress+":8554/test"));
+    leftPlayer->setMedia(QUrl("rtsp://"+serveradress+":8554/audio1"));
 }
