@@ -9,7 +9,7 @@ pkg_check_modules(GSTREAMER
     REQUIRED gstreamer-1.0) 
 pkg_check_modules(GSTRTSP REQUIRED gstreamer-rtsp-server-1.0)
 
-set(SOURCE_FILES rtsp_serv.c) 
+set(SOURCE_FILES src/rtsp_serv.c src/GstRtspMediaFactoryCustom.c src/GstRtspMediaFactoryCustom.h)
 add_executable(gst_RTSP_server ${SOURCE_FILES}) 
 
 include_directories(${GLIB_INCLUDE_DIRS})
