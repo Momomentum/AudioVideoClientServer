@@ -1,3 +1,6 @@
+.idea
+build/*
 rtsp_serv
 rtsp_serv.o
 compile_commands.json
+cmake-build-debug

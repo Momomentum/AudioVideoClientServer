@@ -1,0 +1,5 @@
+*.o
+AVClient
+.qmake.stash
+moc_*
+ui_mainwindow.h
