@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QMediaPlayer>
 #include <QVideoWidget>
+#include <QJsonDocument>
+#include <QProcess>
 
 namespace Ui {
 class MainWindow;
@@ -34,6 +36,13 @@ public:
     int music_right_effect_1;
     int music_right_effect_2;
     int music_right_effect_3;
+    int video_left_red;
+    int video_left_green;
+    int video_left_blue;
+    int video_right_red;
+    int video_right_green;
+    int video_right_blue;
+    int video_cross;
     QString serveradress;
     QStringList fileNames;
     QMediaPlayer* player;
@@ -97,6 +106,20 @@ private slots:
     void on_verticalSlider_2_valueChanged(int value);
 
     void on_pushButton_12_clicked();
+
+    void on_dial_17_valueChanged(int value);
+
+    void on_dial_14_valueChanged(int value);
+
+    void on_dial_18_valueChanged(int value);
+
+    void on_horizontalSlider_2_valueChanged(int value);
+
+    void on_dial_20_valueChanged(int value);
+
+    void on_dial_15_valueChanged(int value);
+
+    void on_dial_19_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;

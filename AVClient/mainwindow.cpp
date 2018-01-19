@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     QPixmap libraryPix("C:/Users/Lukas/Documents/AVClient/Assets/audio-video.JPG");
     QIcon libraryIcon = libraryPix;
     ui->stackedWidget->setCurrentIndex(0);
@@ -23,9 +24,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    player->setMedia(QUrl("rtsp://192.168.0.15:8554/test"));
-    resultPlayer->setMedia(QUrl("rtsp://192.168.0.15:8554/test"));
-    leftPlayer->setMedia(QUrl("rtsp://192.168.0.15:8554/audio1"));
+    player->setMedia(QUrl("http://192.168.0.15:80/test/playlist.m3u8"));
+    resultPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
+    leftPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
+
+
 
     //player->play();
 
@@ -104,6 +107,8 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_dial_valueChanged(int value)
 {
     music_left_high = value;
+    //QJsonDocument sendDocument = new QJsonDocument(object);
+    //qDebug << sendDocument.toJson("Indented");
 }
 
 void MainWindow::on_dial_2_valueChanged(int value)
@@ -185,7 +190,42 @@ void MainWindow::on_pushButton_12_clicked()
 {
     serveradress = ui->lineEdit->text();
     //qDebug() << serveradress;
-    player->setMedia(QUrl("rtsp://"+serveradress+":8554/test"));
-    resultPlayer->setMedia(QUrl("rtsp://"+serveradress+":8554/test"));
-    leftPlayer->setMedia(QUrl("rtsp://"+serveradress+":8554/audio1"));
+    player->setMedia(QUrl("rtp://"+serveradress+":3000"));
+    resultPlayer->setMedia(QUrl("rtp://"+serveradress+":3000"));
+    leftPlayer->setMedia(QUrl("rtp://"+serveradress+":3000"));
+}
+
+void MainWindow::on_dial_17_valueChanged(int value)
+{
+    video_left_red = value;
+}
+
+void MainWindow::on_dial_14_valueChanged(int value)
+{
+    video_left_green = value;
+}
+
+void MainWindow::on_dial_18_valueChanged(int value)
+{
+    video_left_blue = value;
+}
+
+void MainWindow::on_horizontalSlider_2_valueChanged(int value)
+{
+    video_cross = value;
+}
+
+void MainWindow::on_dial_20_valueChanged(int value)
+{
+    video_right_red = value;
+}
+
+void MainWindow::on_dial_15_valueChanged(int value)
+{
+    video_right_green = value;
+}
+
+void MainWindow::on_dial_19_valueChanged(int value)
+{
+    video_right_blue = value;
 }
