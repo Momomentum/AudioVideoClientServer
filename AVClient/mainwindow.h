@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QMediaPlayer>
 #include <QVideoWidget>
+#include <QProcess>
 
 namespace Ui {
 class MainWindow;

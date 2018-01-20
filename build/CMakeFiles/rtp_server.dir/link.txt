@@ -1,0 +1,1 @@
+/usr/bin/cc -g  -rdynamic CMakeFiles/rtp_server.dir/src/rtp_server.c.o CMakeFiles/rtp_server.dir/src/cJSON.c.o  -o rtp_server -lglib-2.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgstreamer-1.0 -lgio-2.0 
