@@ -1,13 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+QProcess *process;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    QPixmap libraryPix("C:/Users/Lukas/Documents/AVClient/Assets/audio-video.JPG");
+    QPixmap libraryPix("Assets/audio-video.JPG");
     QIcon libraryIcon = libraryPix;
     ui->stackedWidget->setCurrentIndex(0);
     ui->pushButton_7->setIcon(libraryIcon);
@@ -22,7 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     leftPlayer->setVideoOutput(ui->widget_3);
     rightPlayer->setVideoOutput(ui->widget_4);
 
-
+    process = new QProcess();
+    QStringList args = QString("-v udpsrc uri=127.0.0.1 port=3000 ! application/x-rtp,media=audio, clock-rate=22000, width=16, height=16, encoding-name=L16, encoding-params=1, channels=1 ! rtpL16depay ! audioconvert ! autoaudiosink ").split(" ");
+    process->start("gst-launch-1.0", args);
 
     player->setMedia(QUrl("http://192.168.0.15:80/test/playlist.m3u8"));
     resultPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
@@ -38,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    process->terminate();
     delete ui;
 }
 

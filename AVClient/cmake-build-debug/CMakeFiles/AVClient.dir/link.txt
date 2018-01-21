@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -g   CMakeFiles/AVClient.dir/main.cpp.o  -o AVClient /usr/lib/libQt5Widgets.so.5.10.0 /usr/lib/libQt5Multimedia.so.5.10.0 /usr/lib/libQt5Gui.so.5.10.0 /usr/lib/libQt5Network.so.5.10.0 /usr/lib/libQt5Core.so.5.10.0 
