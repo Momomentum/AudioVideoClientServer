@@ -35,3 +35,5 @@ target_compile_options(test_client PUBLIC ${GLIB_CFLAGS_OTHER})
 target_compile_options(test_client PUBLIC ${GIO_CFLAGS_OTHER})
 target_link_libraries(test_client ${GLIB_LIBRARIES})
 target_link_libraries(test_client ${GIO_LIBRARIES})
+
+add_executable(cjson_test src/cjson_test.c src/cJSON.c)

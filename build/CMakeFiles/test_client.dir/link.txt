@@ -1,1 +1,0 @@
-/usr/bin/cc -g  -rdynamic CMakeFiles/test_client.dir/src/test_client.c.o CMakeFiles/test_client.dir/src/cJSON.c.o  -o test_client -lglib-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lgio-2.0 -lgobject-2.0 

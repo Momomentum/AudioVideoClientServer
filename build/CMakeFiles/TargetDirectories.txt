@@ -1,4 +1,0 @@
-/home/moritzmg/Code/audio_video17/build/CMakeFiles/rebuild_cache.dir
-/home/moritzmg/Code/audio_video17/build/CMakeFiles/edit_cache.dir
-/home/moritzmg/Code/audio_video17/build/CMakeFiles/test_client.dir
-/home/moritzmg/Code/audio_video17/build/CMakeFiles/rtp_server.dir

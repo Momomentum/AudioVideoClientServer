@@ -81,7 +81,7 @@ incoming_callback (GSocketService *service,
                                NULL,
                                message_ready,
                                stream_data);
-    return FALSE;
+    return FALSE; // TODO check if should return true
 }
 
 
