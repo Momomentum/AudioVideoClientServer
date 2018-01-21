@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     resultPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
     leftPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
 
-
+    commandsObject.setValues(5,10);
 
     //player->play();
 

@@ -8,6 +8,7 @@
 #include <QVideoWidget>
 #include <QJsonDocument>
 #include <QProcess>
+#include "jsonobject.h"
 
 namespace Ui {
 class MainWindow;
@@ -49,6 +50,7 @@ public:
     QMediaPlayer* leftPlayer;
     QMediaPlayer* rightPlayer;
     QMediaPlayer* resultPlayer;
+    JsonObject commandsObject;
 
 private slots:
     void on_pushButton_2_clicked();
