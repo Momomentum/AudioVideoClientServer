@@ -1,4 +1,5 @@
 *.o
 AVClient
+AVClient.pro.*
 .qmake.stash
 moc_*
