@@ -36,3 +36,6 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+CONFIG += link_pkgconfig
+PKGCONFIG += gstreamer-1.0 glib-2.0 gstreamer-video-1.0

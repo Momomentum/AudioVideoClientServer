@@ -103,7 +103,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="stackedWidgetPage1">
      <widget class="QPushButton" name="pushButton_7">
@@ -4337,7 +4337,10 @@
        </rect>
       </property>
       <property name="maximum">
-       <number>127</number>
+       <number>100</number>
+      </property>
+      <property name="singleStep">
+       <number>1</number>
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -8392,7 +8395,7 @@
      <x>0</x>
      <y>0</y>
      <width>597</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

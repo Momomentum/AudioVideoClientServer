@@ -4,18 +4,28 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include <QString>
 class JsonObject
 {
 public:
     JsonObject();
     JsonObject(int command, int value);
-    void setValues(int command, int value);
-    int command;
-    int value;
+    void setValuesVolume(QString target, QString control, float value);
+    void setValuesEQ(QString target, QString control, float low, float mid, float high);
+    QString target;
+    QString control;
+    float value;
     QJsonObject object
     {
-        {"command", 1},
-        {"value", 2}
+        {"target", ""},
+        {"control", ""},
+        {"value", 0}
+    };
+    QJsonObject eq_object
+    {
+        {"low", 0},
+        {"mid", 0},
+        {"high", 0}
     };
 };
 

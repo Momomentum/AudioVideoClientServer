@@ -48,17 +48,17 @@ void message_ready (GObject * source_object,
         }
     }
 
-    cJSON *parsedMessage = cJSON_Parse(data->message);
-    if(parsedMessage == NULL) {
-        g_error ("Could not parse json");
-    } else {
-        g_object_set(data->data->volume, "volume", 0, NULL);
-    }
+//    cJSON *parsedMessage = cJSON_Parse(data->message);
+//    if(parsedMessage == NULL) {
+//        g_error ("Could not parse json");
+//    } else {
+//        g_object_set(data->data->volume, "volume", 0, NULL);
+//    }
 
     g_message ("Message was: \"%s\"\n", data->message);
     g_object_unref (G_SOCKET_CONNECTION (data->connection));
     g_free (data);
-    cJSON_Delete(parsedMessage);
+//    cJSON_Delete(parsedMessage);
 }
 
 static gboolean

@@ -27,6 +27,7 @@ main (int argc, char *argv[])
     if (error != NULL)
     {
         g_error (error->message);
+        return -1;
     }
     else
     {

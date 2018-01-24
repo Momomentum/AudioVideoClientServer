@@ -8,11 +8,13 @@
 #include <QVideoWidget>
 #include <QJsonDocument>
 #include <QProcess>
+#include <QTcpSocket>
 #include "jsonobject.h"
 
 namespace Ui {
 class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
@@ -21,9 +23,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+//    Ui::MainWindow *getMainWindow();
     int music_cross;
     int music_master;
-    int music_left_master;
+    float music_left_master;
     int music_left_high;
     int music_left_mid;
     int music_left_low;
@@ -46,10 +49,12 @@ public:
     int video_cross;
     QString serveradress;
     QStringList fileNames;
+
     QMediaPlayer* player;
     QMediaPlayer* leftPlayer;
     QMediaPlayer* rightPlayer;
     QMediaPlayer* resultPlayer;
+    QTcpSocket* socket;
     JsonObject commandsObject;
 
 private slots:
