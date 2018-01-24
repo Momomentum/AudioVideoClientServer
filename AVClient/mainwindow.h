@@ -84,8 +84,6 @@ private slots:
 
     void on_dial_3_valueChanged(int value);
 
-    void on_dial_music_left_low_valueChanged(int value);
-
     void on_dial_4_valueChanged(int value);
 
     void on_dial_5_valueChanged(int value);

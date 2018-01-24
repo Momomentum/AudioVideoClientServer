@@ -103,7 +103,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="stackedWidgetPage1">
      <widget class="QPushButton" name="pushButton_7">
