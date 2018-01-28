@@ -4360,6 +4360,9 @@
       <property name="singleStep">
        <number>1</number>
       </property>
+      <property name="value">
+       <number>100</number>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
@@ -4802,7 +4805,10 @@
        </rect>
       </property>
       <property name="maximum">
-       <number>127</number>
+       <number>100</number>
+      </property>
+      <property name="value">
+       <number>100</number>
       </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>

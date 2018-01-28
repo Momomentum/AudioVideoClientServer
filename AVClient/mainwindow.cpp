@@ -30,46 +30,10 @@ MainWindow::MainWindow(CustomData *data, QWidget *parent) :
     ui->pushButton_10->setIcon(videoMixIcon);
     ui->pushButton_10->setIconSize(QSize(192,108));
 
-//    process = new QProcess();
-//    QStringList args = QString("-v udpsrc uri=127.0.0.1 port=3000 ! application/x-rtp,media=audio, clock-rate=48000, width=16, height=16, encoding-name=L16, channels=2 ! rtpL16depay ! audioconvert ! filesink location=/dev/fd/1 ").split(" ");
-//    process->start("gst-launch-1.0", args);
-
-
-
-
-//    widget = new QVideoWidget;
-//    player = new QMediaPlayer;
-//    resultPlayer = new QMediaPlayer;
-//    leftPlayer = new QMediaPlayer;
-//    rightPlayer = new QMediaPlayer;
-//    player->setVideoOutput(ui->widget);
-//    resultPlayer->setVideoOutput(ui->widget_2);
-//    leftPlayer->setVideoOutput(ui->widget_3);
-//    rightPlayer->setVideoOutput(ui->widget_4);
-
-//    ui->widget->setMediaPlayer(player);
 
     // TCP SOCKET
     socket = new QTcpSocket();
-//    socket->connectToHost("192.168.0.15", 2345);
-//    socket->waitForConnected();
 
-
-//    process = new QProcess();
-//    QStringList args = QString("-v udpsrc uri=127.0.0.1 port=3000 ! application/x-rtp,media=audio, clock-rate=48000, width=16, height=16, encoding-name=L16, channels=2 ! rtpL16depay ! audioconvert ! filesink location=/dev/fd/0 ").split(" ");
-//    process->start("gst-launch-1.0", args);
-
-//    player->setMedia(QUrl("127.0.0.1:3000"));
-//    resultPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
-//    leftPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
-
-
-
-//    player->play();
-//    player->setVolume(50);
-
-    //qDebug() << player->state();
-    //qDebug() << player->mediaStream();
 }
 
 MainWindow::~MainWindow()
@@ -79,8 +43,10 @@ MainWindow::~MainWindow()
     gst_element_set_state (data->video1_pipeline, GST_STATE_NULL);
     gst_object_unref (data->video1_pipeline);
 
-    gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_NULL);
-    gst_object_unref(data->mixed_audio_pipeline);
+    gst_element_set_state (data->left_audio_pipeline, GST_STATE_NULL);
+    gst_object_unref(data->left_audio_pipeline);
+    gst_element_set_state (data->right_audio_pipeline, GST_STATE_NULL);
+    gst_object_unref(data->right_audio_pipeline);
 //    process->terminate();
     delete ui;
 }
@@ -125,9 +91,7 @@ void MainWindow::on_pushButton_5_clicked()
 void MainWindow::on_pushButton_6_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
-    resultPlayer->setVolume(0);
-    leftPlayer->setVolume(0);
-    rightPlayer->setVolume(0);
+
 }
 
 void MainWindow::on_pushButton_9_clicked()
@@ -138,10 +102,7 @@ void MainWindow::on_pushButton_9_clicked()
 void MainWindow::on_pushButton_10_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
-    leftPlayer->setVolume(50);
-    leftPlayer->play();
-    resultPlayer->setVolume(0);
-    resultPlayer->play();
+
 }
 
 void MainWindow::on_pushButton_4_clicked()
@@ -295,18 +256,12 @@ void MainWindow::on_pushButton_12_clicked()
 
    socket->connectToHost(serveradress, 2345);
    socket->waitForConnected();
-//   foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
-//       if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
-//            qDebug() << address.toString();
-//            clientadress = address.toString();
-//   }
    socket->write("init",5);
 
-   data->mixed_audio_pipeline = gst_pipeline_new("audio_pipeline");
-   data->mixed_audio_src = gst_element_factory_make("udpsrc", "udp_audio_src");
-   data->mixed_audio_depay = gst_element_factory_make("rtpL16depay", "audio_depay");
-//    data->mixed_audio_dec = gst_element_factory_make("avdec_h264", "videodec");
-   data->mixed_audio_sink = gst_element_factory_make("autoaudiosink", "audio_sink");
+   data->left_audio_pipeline = gst_pipeline_new("audio_pipeline");
+   data->left_audio_src = gst_element_factory_make("udpsrc", "udp_audio_src");
+   data->left_audio_depay = gst_element_factory_make("rtpL16depay", "audio_depay");
+   data->left_audio_sink = gst_element_factory_make("autoaudiosink", "audio_sink");
 
 
 
@@ -322,38 +277,93 @@ void MainWindow::on_pushButton_12_clicked()
    );
 
 
-   g_object_set(G_OBJECT(data->mixed_audio_src), "port", 3001, NULL);
-   g_object_set(G_OBJECT(data->mixed_audio_src), "caps", audio_caps, NULL);
+   g_object_set(G_OBJECT(data->left_audio_src), "port", 3001, NULL);
+   g_object_set(G_OBJECT(data->left_audio_src), "caps", audio_caps, NULL);
 
-   g_object_set(data->mixed_audio_src, "uri", "file:///home/moritzmg/Music/output.wav");
+   //g_object_set(data->left_audio_src, "uri", "file:///home/moritzmg/Music/output.wav");
 
-   gst_caps_unref(audio_caps);
+   //gst_caps_unref(audio_caps);
 
-   if (data->mixed_audio_sink == NULL) {
+   if (data->left_audio_sink == NULL) {
        g_error ("Couldn't find a working audio sink.");
    }
 
 
    // Link audio pipeline
-   gst_bin_add_many (GST_BIN (data->mixed_audio_pipeline), data->mixed_audio_src, data->mixed_audio_depay, data->mixed_audio_sink, NULL);
+   gst_bin_add_many (GST_BIN (data->left_audio_pipeline), data->left_audio_src, data->left_audio_depay, data->left_audio_sink, NULL);
 
-//   gst_bin_add_many (GST_BIN (data->mixed_audio_pipeline), data->mixed_audio_src, NULL);
+//   gst_bin_add_many (GST_BIN (data->left_audio_pipeline), data->left_audio_src, NULL);
 
 
-   gst_element_link(data->mixed_audio_src, data->mixed_audio_depay);
-   gst_element_link(data->mixed_audio_depay, data->mixed_audio_sink);
+   gst_element_link(data->left_audio_src, data->left_audio_depay);
+   gst_element_link(data->left_audio_depay, data->left_audio_sink);
 
 
 
    /* run the pipeline */
-    GstStateChangeReturn sret = gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_PLAYING);
+    GstStateChangeReturn sret = gst_element_set_state (data->left_audio_pipeline, GST_STATE_PLAYING);
 
    if (sret == GST_STATE_CHANGE_FAILURE /*|| audioret == GST_STATE_CHANGE_FAILURE*/) {
 
        qDebug() << "CRASH!!!!";
 
-        gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_NULL);
-        gst_object_unref (data->mixed_audio_pipeline);
+        gst_element_set_state (data->left_audio_pipeline, GST_STATE_NULL);
+        gst_object_unref (data->left_audio_pipeline);
+       /* Exit application */
+       QTimer::singleShot(0, QApplication::activeWindow(), SLOT(quit()));
+   }
+
+   data->right_audio_pipeline = gst_pipeline_new("audio_pipeline");
+   data->right_audio_src = gst_element_factory_make("udpsrc", "udp_audio_src");
+   data->right_audio_depay = gst_element_factory_make("rtpL16depay", "audio_depay");
+   data->right_audio_sink = gst_element_factory_make("autoaudiosink", "audio_sink");
+
+
+
+//   GstCaps *audio_caps = gst_caps_new_simple(
+//       "application/x-rtp",
+//       "media", G_TYPE_STRING, "audio",
+//       "clock-rate", G_TYPE_INT, 48000,
+//       "encoding-name", G_TYPE_STRING, "L16",
+//       "encoding-params", G_TYPE_STRING, "2",
+//       "channels", G_TYPE_INT, 2,
+//       "payload", G_TYPE_INT, 96,
+//       NULL
+//   );
+
+
+   g_object_set(G_OBJECT(data->right_audio_src), "port", 3002, NULL);
+   g_object_set(G_OBJECT(data->right_audio_src), "caps", audio_caps, NULL);
+
+   //g_object_set(data->right_audio_src, "uri", "file:///home/moritzmg/Music/output.wav");
+
+   gst_caps_unref(audio_caps);
+
+   if (data->right_audio_sink == NULL) {
+       g_error ("Couldn't find a working audio sink.");
+   }
+
+
+   // Link audio pipeline
+   gst_bin_add_many (GST_BIN (data->right_audio_pipeline), data->right_audio_src, data->right_audio_depay, data->right_audio_sink, NULL);
+
+//   gst_bin_add_many (GST_BIN (data->right_audio_pipeline), data->right_audio_src, NULL);
+
+
+   gst_element_link(data->right_audio_src, data->right_audio_depay);
+   gst_element_link(data->right_audio_depay, data->right_audio_sink);
+
+
+
+   /* run the pipeline */
+    GstStateChangeReturn sret2 = gst_element_set_state (data->right_audio_pipeline, GST_STATE_PLAYING);
+
+   if (sret2 == GST_STATE_CHANGE_FAILURE /*|| audioret == GST_STATE_CHANGE_FAILURE*/) {
+
+       qDebug() << "CRASH!!!!";
+
+        gst_element_set_state (data->right_audio_pipeline, GST_STATE_NULL);
+        gst_object_unref (data->right_audio_pipeline);
        /* Exit application */
        QTimer::singleShot(0, QApplication::activeWindow(), SLOT(quit()));
    }

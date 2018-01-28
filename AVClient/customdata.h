@@ -29,11 +29,17 @@ typedef struct _CustomData {
     GstElement *mixed_video_sink;
 
     // Audio Data
-    GstElement *mixed_audio_pipeline;
-//    GstElement *mixed_audio_dec;
-    GstElement *mixed_audio_depay;
-    GstElement *mixed_audio_src;
-    GstElement *mixed_audio_sink;
+    GstElement *left_audio_pipeline;
+//    GstElement *left_audio_dec;
+    GstElement *left_audio_depay;
+    GstElement *left_audio_src;
+    GstElement *left_audio_sink;
+
+    GstElement *right_audio_pipeline;
+//    GstElement *right_audio_dec;
+    GstElement *right_audio_depay;
+    GstElement *right_audio_src;
+    GstElement *right_audio_sink;
 
 
 } CustomData;

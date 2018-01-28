@@ -727,6 +727,7 @@ public:
         verticalSlider->setGeometry(QRect(60, 130, 22, 131));
         verticalSlider->setMaximum(100);
         verticalSlider->setSingleStep(1);
+        verticalSlider->setValue(100);
         verticalSlider->setOrientation(Qt::Vertical);
         dial_12 = new QDial(page_3);
         dial_12->setObjectName(QStringLiteral("dial_12"));
@@ -782,7 +783,8 @@ public:
         verticalSlider_2 = new QSlider(page_3);
         verticalSlider_2->setObjectName(QStringLiteral("verticalSlider_2"));
         verticalSlider_2->setGeometry(QRect(460, 130, 22, 131));
-        verticalSlider_2->setMaximum(127);
+        verticalSlider_2->setMaximum(100);
+        verticalSlider_2->setValue(100);
         verticalSlider_2->setOrientation(Qt::Vertical);
         dial_4 = new QDial(page_3);
         dial_4->setObjectName(QStringLiteral("dial_4"));
