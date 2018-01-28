@@ -19,6 +19,7 @@ typedef struct _AudioData {
     GstElement *pipeline;
 } AudioData;
 
+
 typedef struct _CustomData {
     AudioData *left_audio;
     AudioData *right_audio;
@@ -80,16 +81,19 @@ void message_ready (GObject * source_object,
             control_value = cJSON_GetObjectItemCaseSensitive(parsedMessage, "value");
             target = cJSON_GetObjectItemCaseSensitive(parsedMessage, "target");
             if (cJSON_IsString(control) && (control->valuestring != NULL)) {
-                g_message("Control: \"%s\"\n", control->valuestring);
+//                g_message("Control: \"%s\"\n", control->valuestring);
                 if (strcmp(control->valuestring, "volume") == 0) {
                     if(strcmp(target->valuestring, "audio_1") == 0) {
-                        g_object_set(data->data->left_audio->volume, "volume", strtof(control_value->valuestring, NULL));
+//                        g_message("Volume: \"%f\"\n", atof(control_value->valuestring));
+                        double vol = atof(control_value->valuestring);
+                        g_object_set(data->data->left_audio->volume, "volume", vol, NULL);
                     }
                     else if(strcmp(target->valuestring, "audio_2") == 0) {
-                        g_object_set(data->data->right_audio->volume, "volume", strtof(control_value->valuestring, NULL));
+                        double vol = atof(control_value->valuestring);
+                        g_object_set(data->data->right_audio->volume, "volume", vol, NULL);
                     }
-                    g_message("Volume: \"%s\"\n", control_value->valuestring);
-                    g_message("Target: \"%s\"\n", target->valuestring);
+//                    g_message("Volume: \"%s\"\n", control_value->valuestring);
+//                    g_message("Target: \"%s\"\n", target->valuestring);
                 } else if (strcmp(control->valuestring, "eq") == 0) {
                     const cJSON *low, *mid, *high = NULL;
                     low = cJSON_GetObjectItemCaseSensitive(control_value, "low");
@@ -192,6 +196,7 @@ my_bus_callback (GstBus     *bus,
 }
 
 
+
 //GstElement *pipeline, *audio;
 
 static void
@@ -253,6 +258,7 @@ main (gint   argc,
 
     GstBus *bus1;
     GstBus *bus2;
+    GstBus *bus3;
 
     /* init GStreamer */
     gst_init (&argc, &argv);
@@ -328,8 +334,6 @@ main (gint   argc,
     // Gstreamer
 
     /* setup */
-    audio_right.pipeline = gst_pipeline_new ("pipeline_right");
-    audio_right.pipeline = gst_pipeline_new ("pipeline_right");
 //    convert = gst_element_factory_make("audioconvert", "audioconvert");
 
 
@@ -362,7 +366,7 @@ main (gint   argc,
 
     g_signal_connect (audio_right.decoder, "pad-added", G_CALLBACK (cb_newpad), &audio_right);
 
-    
+
 
 
     bus1 = gst_pipeline_get_bus (GST_PIPELINE (audio_left.pipeline));
@@ -383,7 +387,7 @@ main (gint   argc,
     /* cleanup */
 //    g_socket_service_stop (service);
     gst_element_set_state (audio_left.pipeline, GST_STATE_NULL);
-//    gst_element_set_state (audio_right.pipeline, GST_STATE_NULL);
+    gst_element_set_state (audio_right.pipeline, GST_STATE_NULL);
     gst_object_unref (GST_OBJECT (audio_left.pipeline));
     gst_object_unref (GST_OBJECT (audio_right.pipeline));
 
