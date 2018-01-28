@@ -88,10 +88,10 @@ int main(int argc, char *argv[])
     GstCaps *audio_caps = gst_caps_new_simple(
         "application/x-rtp",
         "media", G_TYPE_STRING, "audio",
-        "clock-rate", G_TYPE_INT,48000,
+        "clock-rate", G_TYPE_INT,44100,
         "encoding-name", G_TYPE_STRING, "L16",
-        "encoding-params", G_TYPE_STRING, "2",
-        "channels", G_TYPE_INT, 2,
+        "encoding-params", G_TYPE_STRING, "1",
+        "channels", G_TYPE_INT, 1,
         "payload", G_TYPE_INT, 96,
         NULL
     );
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     g_object_set(G_OBJECT(data.video1_src), "port", 3000, NULL);
     g_object_set(G_OBJECT(data.video1_src), "caps", caps, NULL);
 
-    g_object_set(G_OBJECT(data.mixed_audio_src), "uri", "udp://127.0.0.1", NULL);
+    g_object_set(G_OBJECT(data.mixed_audio_src), "uri", "udp://192.168.0.23", NULL);
     g_object_set(G_OBJECT(data.mixed_audio_src), "port", 3001, NULL);
     g_object_set(G_OBJECT(data.mixed_audio_src), "caps", audio_caps, NULL);
 

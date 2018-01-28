@@ -35,10 +35,6 @@ void message_ready (GObject * source_object,
     GError *error = NULL;
     ConnData *data = user_data;
 
-    const cJSON *control = NULL;
-    const cJSON *control_value = NULL;
-    const cJSON *target = NULL;
-
     long count;
 
     count = g_input_stream_read_finish (istream,
@@ -53,46 +49,61 @@ void message_ready (GObject * source_object,
         }
     }
 
-    cJSON *parsedMessage = cJSON_Parse(data->message);
-    if(parsedMessage == NULL) {
-        g_error ("Could not parse json");
+    if(strcmp(data->message, "init") == 0) {
+        GSocketAddress *sockAdd =g_socket_connection_get_remote_address(data->connection, NULL);
+        GInetAddress *inet_address = g_object_ref(g_inet_socket_address_get_address(G_INET_SOCKET_ADDRESS(sockAdd)));
+        gchar *ip_addr = g_inet_address_to_string(inet_address);
+
+        g_object_set(data->data->sink, "host", ip_addr);
+
+        g_message ("Message was: \"%s\"\n", ip_addr);
+        g_free(ip_addr);
+        g_object_unref(sockAdd);
     } else {
-        control = cJSON_GetObjectItemCaseSensitive(parsedMessage, "control");
-        control_value = cJSON_GetObjectItemCaseSensitive(parsedMessage, "value");
-        target = cJSON_GetObjectItemCaseSensitive(parsedMessage, "target");
-        if (cJSON_IsString(control) && (control->valuestring != NULL)) {
-            g_message("Control: \"%s\"\n", control->valuestring);
-            if (strcmp(control->valuestring, "volume") == 0) {
-                g_message("Volume: \"%s\"\n", control_value->valuestring);
-                g_message("Target: \"%s\"\n", target->valuestring);
-            } else if (strcmp(control->valuestring, "eq") == 0) {
-                const cJSON *low, *mid, *high = NULL;
-                low = cJSON_GetObjectItemCaseSensitive(control_value, "low");
-                mid = cJSON_GetObjectItemCaseSensitive(control_value, "mid");
-                high = cJSON_GetObjectItemCaseSensitive(control_value, "high");
-                g_message("Low: \"%s\"\n", low->valuestring);
-                g_message("Mid: \"%s\"\n", mid->valuestring);
-                g_message("High: \"%s\"\n", high->valuestring);
-                g_message("Target: \"%s\"\n", target->valuestring);
-            } else if (strcmp(control->valuestring, "play") == 0) {
-                if(strcmp(control_value->valuestring, "1") == 0) {
-                    gst_element_set_state (data->data->pipeline, GST_STATE_PLAYING);
+        const cJSON *control = NULL;
+        const cJSON *control_value = NULL;
+        const cJSON *target = NULL;
+
+
+        cJSON *parsedMessage = cJSON_Parse(data->message);
+        if(parsedMessage == NULL) {
+            g_message("Could not parse json");
+        } else {
+            control = cJSON_GetObjectItemCaseSensitive(parsedMessage, "control");
+            control_value = cJSON_GetObjectItemCaseSensitive(parsedMessage, "value");
+            target = cJSON_GetObjectItemCaseSensitive(parsedMessage, "target");
+            if (cJSON_IsString(control) && (control->valuestring != NULL)) {
+                g_message("Control: \"%s\"\n", control->valuestring);
+                if (strcmp(control->valuestring, "volume") == 0) {
+                    g_message("Volume: \"%s\"\n", control_value->valuestring);
+                    g_message("Target: \"%s\"\n", target->valuestring);
+                } else if (strcmp(control->valuestring, "eq") == 0) {
+                    const cJSON *low, *mid, *high = NULL;
+                    low = cJSON_GetObjectItemCaseSensitive(control_value, "low");
+                    mid = cJSON_GetObjectItemCaseSensitive(control_value, "mid");
+                    high = cJSON_GetObjectItemCaseSensitive(control_value, "high");
+                    g_message("Low: \"%s\"\n", low->valuestring);
+                    g_message("Mid: \"%s\"\n", mid->valuestring);
+                    g_message("High: \"%s\"\n", high->valuestring);
+                    g_message("Target: \"%s\"\n", target->valuestring);
+                } else if (strcmp(control->valuestring, "play") == 0) {
+                    if(strcmp(control_value->valuestring, "1") == 0) {
+                        gst_element_set_state (data->data->pipeline, GST_STATE_PLAYING);
+                    }
+                    else if(strcmp(control_value->valuestring, "0") == 0) {
+                        gst_element_set_state (data->data->pipeline, GST_STATE_PAUSED);
+                    }
+                    g_message("Play: \"%s\"\n", control_value->valuestring);
+                    g_message("Target: \"%s\"\n", target->valuestring);
                 }
-                else if(strcmp(control_value->valuestring, "0") == 0) {
-                    gst_element_set_state (data->data->pipeline, GST_STATE_PAUSED);
-                }
-                g_message("Play: \"%s\"\n", control_value->valuestring);
-                g_message("Target: \"%s\"\n", target->valuestring);
             }
         }
+        cJSON_Delete(parsedMessage);
     }
 
 
-//    g_message ("Message was: \"%s\"\n", data->message);
-
     g_object_unref (G_SOCKET_CONNECTION (data->connection));
     g_free (data);
-    cJSON_Delete(parsedMessage);
 }
 
 static gboolean
