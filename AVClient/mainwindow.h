@@ -11,6 +11,11 @@
 #include <QTcpSocket>
 #include "jsonobject.h"
 #include "customdata.h"
+#include <glib.h>
+#include <gst/gst.h>
+#include <gst/video/videooverlay.h>
+#include <QTimer>
+#include <QWidget>
 
 namespace Ui {
 class MainWindow;
