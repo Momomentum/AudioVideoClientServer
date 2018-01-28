@@ -1,5 +1,6 @@
 #include <gst/gst.h>
 #include <gio/gio.h>
+#include <string.h>
 #include "cJSON.h"
 
 #define BLOCK_SIZE 1024
@@ -34,6 +35,10 @@ void message_ready (GObject * source_object,
     GError *error = NULL;
     ConnData *data = user_data;
 
+    const cJSON *control = NULL;
+    const cJSON *control_value = NULL;
+    const cJSON *target = NULL;
+
     long count;
 
     count = g_input_stream_read_finish (istream,
@@ -48,17 +53,46 @@ void message_ready (GObject * source_object,
         }
     }
 
-//    cJSON *parsedMessage = cJSON_Parse(data->message);
-//    if(parsedMessage == NULL) {
-//        g_error ("Could not parse json");
-//    } else {
-//        g_object_set(data->data->volume, "volume", 0, NULL);
-//    }
+    cJSON *parsedMessage = cJSON_Parse(data->message);
+    if(parsedMessage == NULL) {
+        g_error ("Could not parse json");
+    } else {
+        control = cJSON_GetObjectItemCaseSensitive(parsedMessage, "control");
+        control_value = cJSON_GetObjectItemCaseSensitive(parsedMessage, "value");
+        target = cJSON_GetObjectItemCaseSensitive(parsedMessage, "target");
+        if (cJSON_IsString(control) && (control->valuestring != NULL)) {
+            g_message("Control: \"%s\"\n", control->valuestring);
+            if (strcmp(control->valuestring, "volume") == 0) {
+                g_message("Volume: \"%s\"\n", control_value->valuestring);
+                g_message("Target: \"%s\"\n", target->valuestring);
+            } else if (strcmp(control->valuestring, "eq") == 0) {
+                const cJSON *low, *mid, *high = NULL;
+                low = cJSON_GetObjectItemCaseSensitive(control_value, "low");
+                mid = cJSON_GetObjectItemCaseSensitive(control_value, "mid");
+                high = cJSON_GetObjectItemCaseSensitive(control_value, "high");
+                g_message("Low: \"%s\"\n", low->valuestring);
+                g_message("Mid: \"%s\"\n", mid->valuestring);
+                g_message("High: \"%s\"\n", high->valuestring);
+                g_message("Target: \"%s\"\n", target->valuestring);
+            } else if (strcmp(control->valuestring, "play") == 0) {
+                if(strcmp(control_value->valuestring, "1") == 0) {
+                    gst_element_set_state (data->data->pipeline, GST_STATE_PLAYING);
+                }
+                else if(strcmp(control_value->valuestring, "0") == 0) {
+                    gst_element_set_state (data->data->pipeline, GST_STATE_PAUSED);
+                }
+                g_message("Play: \"%s\"\n", control_value->valuestring);
+                g_message("Target: \"%s\"\n", target->valuestring);
+            }
+        }
+    }
 
-    g_message ("Message was: \"%s\"\n", data->message);
+
+//    g_message ("Message was: \"%s\"\n", data->message);
+
     g_object_unref (G_SOCKET_CONNECTION (data->connection));
     g_free (data);
-//    cJSON_Delete(parsedMessage);
+    cJSON_Delete(parsedMessage);
 }
 
 static gboolean
@@ -69,6 +103,7 @@ incoming_callback (GSocketService *service,
 {
     g_message ("Received Connection from client!\n");
     GInputStream *istream = g_io_stream_get_input_stream (G_IO_STREAM (connection));
+
     ConnData *stream_data = g_new (ConnData, 1);
 
     stream_data->connection = g_object_ref (connection);
@@ -273,6 +308,7 @@ main (gint   argc,
     g_socket_service_stop (service);
     gst_element_set_state (data.pipeline, GST_STATE_NULL);
     gst_object_unref (GST_OBJECT (data.pipeline));
+
 
     return 0;
 }
