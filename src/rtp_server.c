@@ -296,7 +296,7 @@ main (gint   argc,
 
 
     g_object_set (data.volume, "volume", 1.0, "mute", FALSE, NULL);
-    g_object_set (data.sink, "host", "127.0.0.1", "port", 3000, NULL);
+    g_object_set (data.sink, "host", "127.0.0.1", "port", 3001, NULL);
 //    g_object_set (G_OBJECT (payload), "channels", 2, NULL);
 
     //sink = gst_element_factory_make ("alsasink", "sink");

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QNetworkInterface>
+#include <QTimer>
 
 
 
@@ -75,6 +76,11 @@ MainWindow::~MainWindow()
 {
 
     socket->close();
+    gst_element_set_state (data->video1_pipeline, GST_STATE_NULL);
+    gst_object_unref (data->video1_pipeline);
+
+    gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_NULL);
+    gst_object_unref(data->mixed_audio_pipeline);
 //    process->terminate();
     delete ui;
 }
@@ -295,15 +301,64 @@ void MainWindow::on_pushButton_12_clicked()
 //            clientadress = address.toString();
 //   }
    socket->write("init",5);
-   GstStateChangeReturn audioret = gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_PAUSED);
+
+   data->mixed_audio_pipeline = gst_pipeline_new("audio_pipeline");
+   data->mixed_audio_src = gst_element_factory_make("udpsrc", "udp_audio_src");
+   data->mixed_audio_depay = gst_element_factory_make("rtpL16depay", "audio_depay");
+//    data->mixed_audio_dec = gst_element_factory_make("avdec_h264", "videodec");
+   data->mixed_audio_sink = gst_element_factory_make("autoaudiosink", "audio_sink");
 
 
 
+   GstCaps *audio_caps = gst_caps_new_simple(
+       "application/x-rtp",
+       "media", G_TYPE_STRING, "audio",
+       "clock-rate", G_TYPE_INT, 48000,
+       "encoding-name", G_TYPE_STRING, "L16",
+       "encoding-params", G_TYPE_STRING, "2",
+       "channels", G_TYPE_INT, 2,
+       "payload", G_TYPE_INT, 96,
+       NULL
+   );
 
-//    //qDebug() << serveradress;
-//    player->setMedia(QUrl("rtp://"+serveradress+":3000"));
-//    resultPlayer->setMedia(QUrl("rtp://"+serveradress+":3000"));
-//    leftPlayer->setMedia(QUrl("rtp://"+serveradress+":3000"));
+
+   g_object_set(G_OBJECT(data->mixed_audio_src), "port", 3001, NULL);
+   g_object_set(G_OBJECT(data->mixed_audio_src), "caps", audio_caps, NULL);
+
+   g_object_set(data->mixed_audio_src, "uri", "file:///home/moritzmg/Music/output.wav");
+
+   gst_caps_unref(audio_caps);
+
+   if (data->mixed_audio_sink == NULL) {
+       g_error ("Couldn't find a working audio sink.");
+   }
+
+
+   // Link audio pipeline
+   gst_bin_add_many (GST_BIN (data->mixed_audio_pipeline), data->mixed_audio_src, data->mixed_audio_depay, data->mixed_audio_sink, NULL);
+
+//   gst_bin_add_many (GST_BIN (data->mixed_audio_pipeline), data->mixed_audio_src, NULL);
+
+
+   gst_element_link(data->mixed_audio_src, data->mixed_audio_depay);
+   gst_element_link(data->mixed_audio_depay, data->mixed_audio_sink);
+
+
+
+   /* run the pipeline */
+    GstStateChangeReturn sret = gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_PLAYING);
+
+   if (sret == GST_STATE_CHANGE_FAILURE /*|| audioret == GST_STATE_CHANGE_FAILURE*/) {
+
+       qDebug() << "CRASH!!!!";
+
+        gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_NULL);
+        gst_object_unref (data->mixed_audio_pipeline);
+       /* Exit application */
+       QTimer::singleShot(0, QApplication::activeWindow(), SLOT(quit()));
+   }
+
+
 }
 
 void MainWindow::on_dial_17_valueChanged(int value)
