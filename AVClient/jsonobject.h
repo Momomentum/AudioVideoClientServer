@@ -12,9 +12,10 @@ public:
     JsonObject(int command, int value);
     void setValuesVolume(QString target, QString control, float value);
     void setValuesEQ(QString target, QString control, float low, float mid, float high);
+    void setValuesPlay(QString target, QString control, float value);
     QString target;
     QString control;
-    float value;
+    QString value;
     QJsonObject object
     {
         {"target", ""},

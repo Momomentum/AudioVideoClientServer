@@ -14,15 +14,12 @@ JsonObject::JsonObject(int command, int value)
 void JsonObject::setValuesVolume(QString target, QString control, float value)
 {
     this->target = target;
-    this->value = value;
+    this->value = QString::number(value,'f',3);
     this->control = control;
     object.insert("control", this->control);
     object.insert("value", this->value);
     object.insert("target", this->target);
     object.remove("src");
-    qDebug() << object.value("control");
-    qDebug() << object.value("value");
-    qDebug() << object.value("target");
 }
 
 void JsonObject::setValuesEQ(QString target, QString control, float low, float mid, float high)
@@ -31,12 +28,21 @@ void JsonObject::setValuesEQ(QString target, QString control, float low, float m
     this->control = control;
     object.insert("target", this->target);
     object.insert("control", this->control);
-    eq_object.insert("low",low);
-    eq_object.insert("mid", mid);
-    eq_object.insert("high",high);
+    eq_object.insert("low",QString::number(low,'f',3));
+    eq_object.insert("mid", QString::number(mid,'f',3));
+    eq_object.insert("high",QString::number(high,'f',3));
     object.insert("value", eq_object);
     object.remove("src");
-    qDebug() << object.value("control");
-    qDebug() << object.value("value");
-    qDebug() << object.value("target");
+
+}
+
+void JsonObject::setValuesPlay(QString target, QString control, float value)
+{
+    this->target = target;
+    this->control = control;
+    this->value = value;
+    object.insert("target",this->target);
+    object.insert("control", this->control);
+    object.insert("value", QString::number(value,'f',0));
+    object.remove("src");
 }

@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
     /* run the pipeline */
 
     GstStateChangeReturn sret = gst_element_set_state (data.video1_pipeline, GST_STATE_PAUSED);
-    GstStateChangeReturn audioret = gst_element_set_state (data.mixed_audio_pipeline, GST_STATE_PAUSED);
+    GstStateChangeReturn audioret = gst_element_set_state (data.mixed_audio_pipeline, GST_STATE_PLAYING);
 
     if (sret == GST_STATE_CHANGE_FAILURE || audioret == GST_STATE_CHANGE_FAILURE) {
 

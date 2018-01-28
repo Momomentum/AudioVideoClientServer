@@ -3,7 +3,6 @@
 
 
 
-QProcess *process;
 
 MainWindow::MainWindow(CustomData *data, QWidget *parent) :
     QMainWindow(parent),
@@ -50,6 +49,8 @@ MainWindow::MainWindow(CustomData *data, QWidget *parent) :
 
     // TCP SOCKET
     socket = new QTcpSocket();
+//    socket->connectToHost("192.168.0.15", 2345);
+//    socket->waitForConnected();
 
 
 //    process = new QProcess();
@@ -60,8 +61,7 @@ MainWindow::MainWindow(CustomData *data, QWidget *parent) :
 //    resultPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
 //    leftPlayer->setMedia(QUrl("udp://192.168.0.15:3000"));
 
-    commandsObject.setValuesVolume("audio_1","volume", 0.9);
-    commandsObject.setValuesEQ("audio_1", "eq", 0,1,12);
+
 
 //    player->play();
 //    player->setVolume(50);
@@ -145,19 +145,49 @@ void MainWindow::on_pushButton_4_clicked()
 
 void MainWindow::on_dial_valueChanged(int value)
 {
-    music_left_high = value;
+    music_left_high = float(value)/10;
+    commandsObject.setValuesEQ("audio_1","eq",music_left_low,music_left_mid,music_left_high);
+
+    QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+    socket->connectToHost(serveradress, 2345);
+    socket->waitForConnected();
+    QString json = doc->toJson(doc->JsonFormat::Compact);
+    socket->write(json.toUtf8(), json.size());
+    socket->waitForBytesWritten();
+
+    delete(doc);
     //QJsonDocument sendDocument = new QJsonDocument(object);
     //qDebug << sendDocument.toJson("Indented");
 }
 
 void MainWindow::on_dial_2_valueChanged(int value)
 {
-    music_left_mid = value;
+    music_left_mid = float(value)/10;
+    commandsObject.setValuesEQ("audio_1","eq",music_left_low,music_left_mid,music_left_high);
+
+    QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+    socket->connectToHost(serveradress, 2345);
+    QString json = doc->toJson(doc->JsonFormat::Compact);
+    qDebug() << json;
+    socket->waitForConnected();
+    socket->write(json.toUtf8(), json.size());
+    socket->waitForBytesWritten();
 }
 
 void MainWindow::on_dial_3_valueChanged(int value)
 {
-    music_left_low = value;
+    music_left_low = float(value)/10;
+    commandsObject.setValuesEQ("audio_1","eq",music_left_low,music_left_mid,music_left_high);
+
+    QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+    socket->connectToHost(serveradress, 2345);
+    socket->waitForConnected();
+    QString json = doc->toJson(doc->JsonFormat::Compact);
+    socket->write(json.toUtf8(), json.size());
+    socket->waitForBytesWritten();
 }
 
 void MainWindow::on_dial_4_valueChanged(int value)
@@ -184,6 +214,18 @@ void MainWindow::on_verticalSlider_valueChanged(int value)
 {
     music_left_master = (float)value/100;
     commandsObject.setValuesVolume("audio_1","volume",music_left_master);
+
+    QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+    socket->connectToHost(serveradress, 2345);
+    socket->waitForConnected();
+    QString json = doc->toJson(doc->JsonFormat::Compact);
+    socket->write(json.toUtf8(), json.size());
+    qDebug() << json.size();
+    socket->waitForBytesWritten();
+
+    delete(doc);
+
 }
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
@@ -223,12 +265,8 @@ void MainWindow::on_dial_9_valueChanged(int value)
 
 void MainWindow::on_verticalSlider_2_valueChanged(int value)
 {
-    music_right_master = value;
-}
-
-void MainWindow::on_pushButton_12_clicked()
-{
-    serveradress = ui->lineEdit->text();
+    music_right_master = (float)value/100;
+    commandsObject.setValuesVolume("audio_2","volume",music_right_master);
 
     QJsonDocument *doc = new QJsonDocument(commandsObject.object);
 
@@ -236,9 +274,22 @@ void MainWindow::on_pushButton_12_clicked()
     socket->waitForConnected();
     QString json = doc->toJson(doc->JsonFormat::Compact);
     socket->write(json.toUtf8(), json.size());
+    qDebug() << json.size();
     socket->waitForBytesWritten();
 
     delete(doc);
+}
+
+void MainWindow::on_pushButton_12_clicked()
+{
+    serveradress = ui->lineEdit->text();
+
+
+
+   socket->connectToHost(serveradress, 2345);
+   socket->waitForConnected();
+
+
 
 //    //qDebug() << serveradress;
 //    player->setMedia(QUrl("rtp://"+serveradress+":3000"));
@@ -279,4 +330,66 @@ void MainWindow::on_dial_15_valueChanged(int value)
 void MainWindow::on_dial_19_valueChanged(int value)
 {
     video_right_blue = value;
+}
+
+void MainWindow::on_pushButton_15_clicked()
+{
+    socket->connectToHost(serveradress, 2345);
+    socket->waitForConnected();
+    if(!playing_left)
+    {
+        playing_left = true;
+        commandsObject.setValuesPlay("audio_1","play",1);
+
+        QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+
+        QString json = doc->toJson(doc->JsonFormat::Compact);
+        socket->write(json.toUtf8(), json.size());
+        socket->waitForBytesWritten();
+
+        delete(doc);
+    } else
+    {
+        playing_left = false;
+        commandsObject.setValuesPlay("audio_1","play",0);
+
+        QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+
+        QString json = doc->toJson(doc->JsonFormat::Compact);
+        socket->write(json.toUtf8(), json.size());
+        socket->waitForBytesWritten();
+    }
+}
+
+void MainWindow::on_pushButton_14_clicked()
+{
+    socket->connectToHost(serveradress, 2345);
+    socket->waitForConnected();
+    if(!playing_right)
+    {
+        playing_right = true;
+        commandsObject.setValuesPlay("audio_2","play",1);
+
+        QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+
+        QString json = doc->toJson(doc->JsonFormat::Compact);
+        socket->write(json.toUtf8(), json.size());
+        socket->waitForBytesWritten();
+
+        delete(doc);
+    } else
+    {
+        playing_right = false;
+        commandsObject.setValuesPlay("audio_2","play",0);
+
+        QJsonDocument *doc = new QJsonDocument(commandsObject.object);
+
+
+        QString json = doc->toJson(doc->JsonFormat::Compact);
+        socket->write(json.toUtf8(), json.size());
+        socket->waitForBytesWritten();
+    }
 }

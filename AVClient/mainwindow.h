@@ -25,29 +25,31 @@ public:
     explicit MainWindow(CustomData *data, QWidget *parent = 0);
     ~MainWindow();
 //    Ui::MainWindow *getMainWindow();
-    int music_cross;
-    int music_master;
+    float music_cross;
+    float music_master;
     float music_left_master;
-    int music_left_high;
-    int music_left_mid;
-    int music_left_low;
-    int music_left_effect_1;
-    int music_left_effect_2;
-    int music_left_effect_3;
-    int music_right_master;
-    int music_right_high;
-    int music_right_mid;
-    int music_right_low;
-    int music_right_effect_1;
-    int music_right_effect_2;
-    int music_right_effect_3;
-    int video_left_red;
-    int video_left_green;
-    int video_left_blue;
-    int video_right_red;
-    int video_right_green;
-    int video_right_blue;
-    int video_cross;
+    float music_left_high;
+    float music_left_mid;
+    float music_left_low;
+    float music_left_effect_1;
+    float music_left_effect_2;
+    float music_left_effect_3;
+    float music_right_master;
+    float music_right_high;
+    float music_right_mid;
+    float music_right_low;
+    float music_right_effect_1;
+    float music_right_effect_2;
+    float music_right_effect_3;
+    float video_left_red;
+    float video_left_green;
+    float video_left_blue;
+    float video_right_red;
+    float video_right_green;
+    float video_right_blue;
+    float video_cross;
+    bool playing_left = false;
+    bool playing_right = false;
 
     CustomData *data;
 
@@ -129,6 +131,10 @@ private slots:
     void on_dial_15_valueChanged(int value);
 
     void on_dial_19_valueChanged(int value);
+
+    void on_pushButton_15_clicked();
+
+    void on_pushButton_14_clicked();
 
 private:
     Ui::MainWindow *ui;
