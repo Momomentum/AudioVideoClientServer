@@ -103,7 +103,7 @@
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="stackedWidgetPage1">
      <widget class="QPushButton" name="pushButton_7">
@@ -8395,7 +8395,7 @@
      <x>0</x>
      <y>0</y>
      <width>597</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
