@@ -10,6 +10,7 @@
 #include <QProcess>
 #include <QTcpSocket>
 #include "jsonobject.h"
+#include "customdata.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(CustomData *data, QWidget *parent = 0);
     ~MainWindow();
 //    Ui::MainWindow *getMainWindow();
     int music_cross;
@@ -47,6 +48,9 @@ public:
     int video_right_green;
     int video_right_blue;
     int video_cross;
+
+    CustomData *data;
+
     QString serveradress;
     QStringList fileNames;
 

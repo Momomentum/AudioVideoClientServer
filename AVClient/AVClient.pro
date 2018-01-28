@@ -32,7 +32,8 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    jsonobject.h
+    jsonobject.h \
+    customdata.h
 
 FORMS += \
         mainwindow.ui

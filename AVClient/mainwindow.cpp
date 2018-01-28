@@ -5,32 +5,33 @@
 
 QProcess *process;
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(CustomData *data, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    this->data = data;
     ui->setupUi(this);
-    QPixmap libraryPix("Assets/library.JPG");
+    QPixmap libraryPix("Assets/library.jpg");
     QIcon libraryIcon = libraryPix;
-    QPixmap streamPix("Assets/stream.JPG");
+    QPixmap streamPix("Assets/stream.jpg");
     QIcon streamIcon = streamPix;
-    QPixmap musicMixPix("Assets/musicmix.JPG");
+    QPixmap musicMixPix("Assets/audiomix.jpg");
     QIcon musicMixIcon = musicMixPix;
-    QPixmap videoMixPix("Assets/videomix.JPG");
+    QPixmap videoMixPix("Assets/videomix.jpg");
     QIcon videoMixIcon = videoMixPix;
     ui->stackedWidget->setCurrentIndex(0);
     ui->pushButton_7->setIcon(libraryIcon);
     ui->pushButton_7->setIconSize(QSize(192,108));
     ui->pushButton_8->setIcon(streamIcon);
-    ui->pushButton_8->setIconSize(QSize(192,108);
+    ui->pushButton_8->setIconSize(QSize(192,108));
     ui->pushButton_9->setIcon(musicMixIcon);
-    ui->pushButton_9->setIconSize(QSize(192,108);
+    ui->pushButton_9->setIconSize(QSize(192,108));
     ui->pushButton_10->setIcon(videoMixIcon);
-    ui->pushButton_10->setIconSize(QSize(192,108);
+    ui->pushButton_10->setIconSize(QSize(192,108));
 
-    process = new QProcess();
-    QStringList args = QString("-v udpsrc uri=127.0.0.1 port=3000 ! application/x-rtp,media=audio, clock-rate=48000, width=16, height=16, encoding-name=L16, channels=2 ! rtpL16depay ! audioconvert ! filesink location=/dev/fd/1 ").split(" ");
-    process->start("gst-launch-1.0", args);
+//    process = new QProcess();
+//    QStringList args = QString("-v udpsrc uri=127.0.0.1 port=3000 ! application/x-rtp,media=audio, clock-rate=48000, width=16, height=16, encoding-name=L16, channels=2 ! rtpL16depay ! audioconvert ! filesink location=/dev/fd/1 ").split(" ");
+//    process->start("gst-launch-1.0", args);
 
 
 
@@ -73,7 +74,7 @@ MainWindow::~MainWindow()
 {
 
     socket->close();
-    process->terminate();
+//    process->terminate();
     delete ui;
 }
 
