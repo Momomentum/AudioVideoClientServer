@@ -28,6 +28,7 @@ public:
         {"mid", 0},
         {"high", 0}
     };
+
 };
 
 #endif // JSONOBJECT_H
