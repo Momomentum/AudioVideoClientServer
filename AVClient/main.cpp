@@ -6,6 +6,7 @@
 #include <gst/video/videooverlay.h>
 #include <QTimer>
 #include <QWidget>
+#include <QTcpSocket>
 #include "customdata.h"
 
 
@@ -49,6 +50,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     CustomData data;
+
+
 
     /* prepare the pipeline */
 
@@ -105,11 +108,11 @@ int main(int argc, char *argv[])
         NULL
     );
 
-    g_object_set(G_OBJECT(data.video1_src), "uri", "udp://127.0.0.1", NULL);
+    //g_object_set(G_OBJECT(data.video1_src), "uri", "udp://192.168.0.15", NULL);
     g_object_set(G_OBJECT(data.video1_src), "port", 3000, NULL);
     g_object_set(G_OBJECT(data.video1_src), "caps", caps, NULL);
 
-    g_object_set(G_OBJECT(data.mixed_audio_src), "uri", "udp://127.0.0.1", NULL);
+    //g_object_set(G_OBJECT(data.mixed_audio_src), "uri", "udp://192.168.0.15", NULL);
     g_object_set(G_OBJECT(data.mixed_audio_src), "port", 3001, NULL);
     g_object_set(G_OBJECT(data.mixed_audio_src), "caps", audio_caps, NULL);
 
@@ -150,17 +153,17 @@ int main(int argc, char *argv[])
     /* run the pipeline */
 
     GstStateChangeReturn sret = gst_element_set_state (data.video1_pipeline, GST_STATE_PAUSED);
-    GstStateChangeReturn audioret = gst_element_set_state (data.mixed_audio_pipeline, GST_STATE_PLAYING);
+//    GstStateChangeReturn audioret = gst_element_set_state (data.mixed_audio_pipeline, GST_STATE_PAUSED);
 
-    if (sret == GST_STATE_CHANGE_FAILURE || audioret == GST_STATE_CHANGE_FAILURE) {
+    if (sret == GST_STATE_CHANGE_FAILURE /*|| audioret == GST_STATE_CHANGE_FAILURE*/) {
 
         gst_element_set_state (data.video1_pipeline, GST_STATE_NULL);
         gst_object_unref (data.video1_pipeline);
 
         qDebug() << "CRASH!!!!";
 
-        gst_element_set_state (data.mixed_audio_pipeline, GST_STATE_NULL);
-        gst_object_unref (data.mixed_audio_pipeline);
+//        gst_element_set_state (data.mixed_audio_pipeline, GST_STATE_NULL);
+//        gst_object_unref (data.mixed_audio_pipeline);
         /* Exit application */
         QTimer::singleShot(0, QApplication::activeWindow(), SLOT(quit()));
     }

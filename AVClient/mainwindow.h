@@ -55,6 +55,7 @@ public:
 
     QString serveradress;
     QStringList fileNames;
+    QString clientadress;
 
     QMediaPlayer* player;
     QMediaPlayer* leftPlayer;

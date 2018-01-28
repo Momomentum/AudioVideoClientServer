@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QNetworkInterface>
 
 
 
@@ -288,6 +289,14 @@ void MainWindow::on_pushButton_12_clicked()
 
    socket->connectToHost(serveradress, 2345);
    socket->waitForConnected();
+//   foreach (const QHostAddress &address, QNetworkInterface::allAddresses()) {
+//       if (address.protocol() == QAbstractSocket::IPv4Protocol && address != QHostAddress(QHostAddress::LocalHost))
+//            qDebug() << address.toString();
+//            clientadress = address.toString();
+//   }
+   socket->write("init",5);
+   GstStateChangeReturn audioret = gst_element_set_state (data->mixed_audio_pipeline, GST_STATE_PAUSED);
+
 
 
 

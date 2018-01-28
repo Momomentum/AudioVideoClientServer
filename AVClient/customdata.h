@@ -2,6 +2,7 @@
 #define CUSTOMDATA_H
 
 #include <gst/gst.h>
+#include <glib.h>
 
 
 
