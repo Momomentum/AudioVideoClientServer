@@ -31,6 +31,11 @@ typedef struct _CustomData {
     GstElement *mixed_video_sink;
 
     // Audio Data
+    GstElement *mixed_audio_pipeline;
+    GstElement *mixed_audio_dec;
+    GstElement *mixed_audio_depay;
+    GstElement *mixed_audio_src;
+    GstElement *mixed_audio_sink;
 
 
 } CustomData;
@@ -54,6 +59,26 @@ int main(int argc, char *argv[])
     data.video1_depay = gst_element_factory_make("rtph264depay", "depay");
     data.video1_dec = gst_element_factory_make("avdec_h264", "videodec");
     data.video1_sink = gst_element_factory_make("xvimagesink", "x_sink");
+
+
+    data.video2_pipeline = gst_pipeline_new("xoverlay2");
+    data.video2_src = gst_element_factory_make("udpsrc", "src2");
+    data.video2_depay = gst_element_factory_make("rtph264depay", "depay2");
+    data.video2_dec = gst_element_factory_make("avdec_h264", "videodec2");
+    data.video2_sink = gst_element_factory_make("xvimagesink", "x_sink2");
+
+    data.mixed_video_pipeline = gst_pipeline_new("xoverlay3");
+    data.mixed_video_src = gst_element_factory_make("udpsrc", "src3");
+    data.mixed_video_depay = gst_element_factory_make("rtph264depay", "depay3");
+    data.mixed_video_dec = gst_element_factory_make("avdec_h264", "videodec3");
+    data.mixed_video_sink = gst_element_factory_make("xvimagesink", "x_sink3");
+
+
+    data.mixed_audio_pipeline = gst_pipeline_new("audio_pipeline");
+    data.mixed_audio_src = gst_element_factory_make("udpsrc", "udp_audio_src");
+    data.mixed_audio_depay = gst_element_factory_make("rtph264depay", "audio_depay");
+    data.mixed_audio_dec = gst_element_factory_make("avdec_h264", "videodec");
+    data.mixed_audio_sink = gst_element_factory_make("xvimagesink", "x_sink");
 
     GstCaps *caps = gst_caps_new_simple("application/x-rtp",
                                         "media", G_TYPE_STRING, "video",
